@@ -1,0 +1,50 @@
+body{
+    background-color: #f5f8fa;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.Hero {
+    background-image: url("https://png.pngtree.com/background/20230616/original/pngtree-stethoscope-with-medical-symbols-lay-on-a-dark-table-picture-image_3624628.jpg");
+    background-position: fixed;
+    background-size: cover;
+    background-color: aqua;
+    height:100%;
+    text-align: center;
+    color: white;
+}
+.Hero h1{
+    font-size: 100px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+}
+#cards img{
+    width: 50%;
+}
+
+.card{
+    background-color: #f1f1f149;
+}
+
+img{
+    width: 100%;
+}
+
+.input_style{
+    border: 0px;
+    border-bottom: 1px solid grey;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+
+.form-control:disabled{
+    background-color: #f5f8fa;
+}
+
+.doctors-list:hover div{
+    background-color: aliceblue;
+}
