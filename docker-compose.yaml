@@ -1,0 +1,27 @@
+services: 
+  wwww:
+    image: php:apache  # Use the official PHP 8.2 Apache image
+    container_name: SMS-app   # Name of the container
+    ports:
+      - "80:80"  # Map port 80 on the host to port 80 in the container
+    volumes:
+      - ./src:/var/www/html
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_DATABASE=SchoolManagementSystem
+      - MYSQL_USER=php_docker
+      - MYSQL_PASSWORD=password # this should live in a env var
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1 # equivalent to True
+    volumes:
+      - "./db:/docker-entrypoint-initdb.d" # this is how we persist a sql db even when container stops
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8001:80
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+
+
+  
