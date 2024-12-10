@@ -1,0 +1,10 @@
+//Fatal error: Uncaught Error: Class "mysqli" not found in /var/www/html/index.php:9 Stack trace: #0 {main} thrown in /var/www/html/index.php on line 9
+//run the below code
+docker-php-ext-install mysqli
+
+//grant my self full access to create database in phpmyadmin
+docker exec -it appliedweb-db-1 mysql -u root
+GRANT ALL PRIVILEGES ON *.* TO 'php_docker'@'%';
+FLUSH PRIVILEGES;
+
+crea
