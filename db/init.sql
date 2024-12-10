@@ -1,0 +1,2 @@
+GRANT ALL PRIVILEGES ON *.* TO 'php_docker'@'%';
+FLUSH PRIVILEGES;
