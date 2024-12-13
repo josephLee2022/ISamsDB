@@ -26,7 +26,7 @@ include('_front-header.php')
                     <h1>
                       A Perfect Learning Center <br />
                       <span>
-                        For Your Kids
+                        For Your Children
                       </span>
                     </h1>
                     <p>
