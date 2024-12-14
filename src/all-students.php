@@ -147,5 +147,4 @@ include('_header.php');
         });
     });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php include('_footer.php'); ?>
