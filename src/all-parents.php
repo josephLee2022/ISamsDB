@@ -4,7 +4,7 @@ $conn = getDatabaseConnection();
 include('checkSession.php');
 
 
-$sql = "SELECT parents.id ID, `fname`, `mname`, `lname`, g.gender gender, `email`, `address`, `password`, `photo`, `date_created` FROM `parents` left join genders g on g.id = parents.genderid;";
+$sql = "SELECT parents.id ID, `fname`, `mname`, `lname`, g.gender gender, `email`, `address`, `password`, `photo`, `date_created`, `status` FROM `parents` left join genders g on g.id = parents.genderid WHERE status =1;";
 $result = $conn->query($sql);
 
 include('_header.php');
@@ -51,7 +51,7 @@ include('_header.php');
                                 <td><?php echo ($parent['gender']); ?></td>
                                 <td>
                                     <a class="btn btn-info" href="parent.php?id=<?php echo $parent['ID'];?>">View</a>
-                                    <a class="btn btn-danger">Delete</a>
+                                    <button class="btn btn-danger delete-parent" data-id="<?php echo $parent['ID']; ?>">Delete</button>
                                 </td>
                             </tr>
                         <?php endwhile;?>
@@ -66,6 +66,66 @@ include('_header.php');
     </div>
 </main>
 
+<script>
+    $(document).ready(function () {
+        // Event listener for the delete button
+        $(document).on('click', '.delete-parent', function () {
+            const parentId = $(this).data('id'); // Get the student ID from the data attribute
+
+            // Confirm deletion using SweetAlert2
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This action is irreversible. The Parent and all related records will be permanently deleted.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Perform AJAX request to delete the student
+                    $.ajax({
+                        url: 'delete_parent.php', // PHP file to handle the delete request
+                        type: 'POST',
+                        data: { id: parentId },
+                        success: function (response) {
+                            if (response === 'success') {
+                                // Show success alert after deletion
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'The parent has been successfully deleted.',
+                                    icon: 'success',
+                                    confirmButtonColor: '#3085d6',
+                                }).then(() => {
+                                    // Remove the student's row from the table
+                                    $(`button[data-id="${parentId}"]`).closest('tr').remove();
+                                });
+                            } else {
+                                // Show error alert if the delete failed
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Unable to parent the student. Please try again later.',
+                                    icon: 'error',
+                                    confirmButtonColor: '#3085d6',
+                                });
+                            }
+                        },
+                        error: function () {
+                            // Show error alert if AJAX fails
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'An error occurred while processing the request. Please try again.',
+                                icon: 'error',
+                                confirmButtonColor: '#3085d6',
+                            });
+                        },
+                    });
+                }
+            });
+        });
+    });
+</script>
 
 <script>
     $(document).ready(function() {
