@@ -29,13 +29,13 @@ $errormessage = "";
 // Form submission handling
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get POST data
-    $fname = $_POST['fname'];
-    $mname = $_POST['mname']; // Handle optional field
-    $lname = $_POST['lname'];
-    $genderid = $_POST['genderid'];
-    $address = $_POST['address']; // Handle optional field
-    $dob = $_POST['dob'];
-    $parentid = $_POST['parentid']; // Handle optional field
+    $fname = trim($_POST['fname']);
+    $mname = trim($_POST['mname']); // Handle optional field
+    $lname = trim($_POST['lname']);
+    $genderid = trim($_POST['genderid']);
+    $address = trim($_POST['address']); // Handle optional field
+    $dob = trim($_POST['dob']);
+    $parentid = trim($_POST['parentid']); // Handle optional field
 
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         $fileTmpPath = $_FILES['photo']['tmp_name'];
@@ -52,10 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($errormessage)) {
         // Prepare the SQL query with placeholders
-        $sql = "INSERT INTO `test_Students` (fname, mname, lname, genderid, photo, address, dob, parentid) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO `test_Students` (fname, mname, lname, genderid, photo, address, dob, parentid,status) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssisssi", $fname, $mname, $lname, $genderid, $photo, $address, $dob, $parentid);
+        $status = 1;
+        $stmt->bind_param("sssisssii", $fname, $mname, $lname, $genderid, $photo, $address, $dob, $parentid,$status);
         if ($stmt->execute()) {
             $_SESSION['alert'] = [
                 'type' => 'success',
@@ -86,7 +87,7 @@ include('_header.php');
             ?>  
             <form class="registration-form" method="POST" enctype="multipart/form-data">
                 <div class="row">
-                    <div class=col>
+                    <div class=col-3>
                         <label for="genderid">Gender:</label>
                         <select id="genderid" name="genderid" required>
                             <?php
@@ -96,7 +97,7 @@ include('_header.php');
                                 echo "<option value='{$row['id']}' $selected>{$row['gender']}</option>";
                             }
                             ?>
-                        </select><br><br>
+                        </select>
                     </div>
                 </div><div class="row">
                     <div class=col>
@@ -125,10 +126,10 @@ include('_header.php');
                     </div>
                     <div class=col>
                         <label for="photo">Photo:</label>
-                        <input type="file" id="photo" name="photo" accept="image/*"><br><br>
+                        <input type="file" id="photo" name="photo" accept="image/*">
                     </div>
                     <div class=col>
-                        <label for="parentid">Parent ID:</label><br>
+                        <label for="parentid">Parent ID:</label>
                         <select id="parentid" name="parentid" required>
                             <?php
                             // Fetch genders from the database and display them as options
@@ -141,7 +142,11 @@ include('_header.php');
                         </select><br><br>    
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success w-100">Submit</button>
+                <div class="d-flex flex-row column-gap-2">
+                    <button type="submit" class="btn btn-success w-50">Submit</button>
+                    <button type="button" class="btn btn-secondary w-50" onclick="history.back();">Cancel</button>
+                </div>
+                
             </form>
         </div>
     </div>

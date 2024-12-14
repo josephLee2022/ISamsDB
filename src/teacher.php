@@ -235,13 +235,13 @@ include('_header.php');
                         <div class="tab-window row w-auto m-0">
                             <div class="info-heading col-3 text-end">Profile Pic</div>
                             <div class="info-details col">
-                            <input type="file" name="photo">
+                            <input type="file" name="photo"></div>
                         </div>
                         <br>
                         <button type="submit" class="btn btn-success w-100">SUBMIT</button>
                     </form>
                 </div>
-                
+
                 <div id="password" class="tabcontent">
                     <form id="password-form">
                         <input hidden id="id" name="id" value="<?php echo $id ?>">
@@ -272,7 +272,6 @@ include('_header.php');
                 <div>
                     <a href="all-teachers.php" class="btn btn-warning">Back</a>
                 </div>  
-                
                 <script>
                     // Function to switch between tabs
                     function openCity(evt, cityName) {

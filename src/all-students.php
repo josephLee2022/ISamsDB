@@ -9,11 +9,16 @@ SELECT s.`id` ID, s.`fname` fname, s.`mname` mname, s.`lname` lname, g.gender ge
        CONCAT(p.fname, ' ', p.lname) parent_name, s.`date_created` , s.`status`
 FROM test_Students s
 LEFT JOIN genders g ON s.genderid = g.id
-LEFT JOIN parents p ON s.parentid = p.id;
+LEFT JOIN parents p ON s.parentid = p.id
+where status = 1;
 ";
 $result = $conn->query($sql);
 
 include('_header.php');
+?>
+
+<?php
+// Your existing code here (SQL query, etc.)
 ?>
 
 <main class="py-5">
@@ -52,7 +57,7 @@ include('_header.php');
                                 <td><?php echo ($student['parent_name']); ?></td>
                                 <td>
                                     <a class="btn btn-info" href="student.php?id=<?php echo $student['ID']; ?>">Edit</a>
-                                    <a class="btn btn-danger">Delete</a>
+                                    <button class="btn btn-danger delete-student" data-id="<?php echo $student['ID']; ?>">Delete</button>
                                 </td>
                             </tr>
                         <?php endwhile; ?>
@@ -67,6 +72,70 @@ include('_header.php');
     </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Event listener for the delete button
+        $(document).on('click', '.delete-student', function () {
+            const studentId = $(this).data('id'); // Get the student ID from the data attribute
+
+            // Confirm deletion using SweetAlert2
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This action is irreversible. The student and all related records will be permanently deleted.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Perform AJAX request to delete the student
+                    $.ajax({
+                        url: 'delete_student.php', // PHP file to handle the delete request
+                        type: 'POST',
+                        data: { id: studentId },
+                        success: function (response) {
+                            if (response === 'success') {
+                                // Show success alert after deletion
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'The student has been successfully deleted.',
+                                    icon: 'success',
+                                    confirmButtonColor: '#3085d6',
+                                }).then(() => {
+                                    // Remove the student's row from the table
+                                    $(`button[data-id="${studentId}"]`).closest('tr').remove();
+                                });
+                            } else {
+                                // Show error alert if the delete failed
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Unable to delete the student. Please try again later.',
+                                    icon: 'error',
+                                    confirmButtonColor: '#3085d6',
+                                });
+                            }
+                        },
+                        error: function () {
+                            // Show error alert if AJAX fails
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'An error occurred while processing the request. Please try again.',
+                                icon: 'error',
+                                confirmButtonColor: '#3085d6',
+                            });
+                        },
+                    });
+                }
+            });
+        });
+    });
+</script>
+
 <script>
     $(document).ready(function() {
         $('#studentsTable').DataTable({
@@ -79,34 +148,4 @@ include('_header.php');
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.getElementById('importBtn').addEventListener('click', function () {
-        Swal.fire({
-            title: 'Do you already have the template?',
-            showDenyButton: true,
-            showCancelButton: true,
-            confirmButtonText: 'Yes, I have it',
-            denyButtonText: 'No, download it',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Prompt user to upload the file
-                Swal.fire({
-                    title: 'Upload CSV File',
-                    html: '<form id="uploadForm" action="import_students.php" method="POST" enctype="multipart/form-data">' +
-                        '<input type="file" name="csv_file" class="form-control" accept=".csv" required>' +
-                        '</form>',
-                    showCancelButton: true,
-                    confirmButtonText: 'Upload',
-                    preConfirm: () => {
-                        document.getElementById('uploadForm').submit();
-                    }
-                });
-            } else if (result.isDenied) {
-                // Redirect to download the template
-                window.location.href = 'generate_csv_template.php';
-            }
-        });
-    });
-</script>
-
 <?php include('_footer.php'); ?>
