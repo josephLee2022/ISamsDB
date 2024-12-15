@@ -10,7 +10,7 @@ SELECT s.`id` ID, s.`fname` fname, s.`mname` mname, s.`lname` lname, g.gender ge
 FROM test_Students s
 LEFT JOIN genders g ON s.genderid = g.id
 LEFT JOIN parents p ON s.parentid = p.id
-where status = 1;
+where s.status = 1;
 ";
 $result = $conn->query($sql);
 

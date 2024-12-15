@@ -16,7 +16,7 @@ include('_header.php');
             <h2 class="page-title">Year Groups</h2>
             <br>
             <p class="text-end">
-                <a class="btn btn-primary" href="add-year.php" >Add</a>
+                <a class="btn btn-primary" href="year.php" >Add</a>
             </p>
             <table id="yearsTable" class="table table-dark table-bordered table-hover">
                 <thead>
@@ -53,12 +53,12 @@ include('_header.php');
     $(document).ready(function () {
         // Event listener for the delete button
         $(document).on('click', '.delete-year', function () {
-            const yearID = $(this).data('id'); // Get the student ID from the data attribute
+            const yearID = $(this).data('id'); // Get the year ID from the data attribute
 
             // Confirm deletion using SweetAlert2
             Swal.fire({
                 title: 'Are you sure?',
-                text: 'This action is irreversible. The student and all related records will be permanently deleted.',
+                text: 'This action is irreversible. The year and all related records will be permanently deleted.',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -67,7 +67,7 @@ include('_header.php');
                 cancelButtonText: 'Cancel',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Perform AJAX request to delete the student
+                    // Perform AJAX request to delete the year
                     $.ajax({
                         url: 'delete_yearGroup.php', // PHP file to handle the delete request
                         type: 'POST',
@@ -81,7 +81,7 @@ include('_header.php');
                                     icon: 'success',
                                     confirmButtonColor: '#3085d6',
                                 }).then(() => {
-                                    // Remove the student's row from the table
+                                    // Remove the year's row from the table
                                     $(`button[data-id="${yearID}"]`).closest('tr').remove();
                                 });
                             } else {

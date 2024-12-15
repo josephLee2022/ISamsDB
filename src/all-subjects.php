@@ -17,7 +17,7 @@ include('_header.php');
             <h2 class="page-title">all subjects</h2>
             <br>
             <p class="text-end">
-                <a class="btn btn-primary" href="add-subject.php" >Add</a>
+                <a class="btn btn-primary" href="subject.php" >Add</a>
             </p>
             <table id="subjectsTable" class="table table-dark table-bordered table-hover">
                 <thead>
@@ -34,7 +34,7 @@ include('_header.php');
                                 <td><?php echo ($subject['id']); ?></td>
                                 <td><?php echo ($subject['subject']); ?></td>
                                 <td>
-                                    <a class="btn btn-info" href="edit-subject.php?id=<?php echo $subject['id'];?>">Edit</a>
+                                    <a class="btn btn-info" href="subject.php?id=<?php echo $subject['id'];?>">Edit</a>
                                     <button class="btn btn-danger delete-subject" data-id="<?php echo $subject['id']; ?>">Delete</button>
                                 </td>
                             </trr>

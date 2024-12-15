@@ -5,12 +5,12 @@ include('checkSession.php');
 
 
 $sql = "
-SELECT e.`id`, y.year,s.fname sfname,s.mname smname,s.lname slname ,c.classcode, t.fname,t.lname FROM `enrollments` e
+SELECT e.`id`, y.year,s.fname sfname,s.mname smname,s.lname slname, s.status ,c.classcode, t.fname,t.lname FROM `enrollments` e
 left join year_groups y on y.id = e.yeargroupid
 left join classes c on c.id = e.classid
 left JOIN teachers t on t.id = c.teacherid
-left join test_Students s on s.id = e.studentid;
-";
+left join test_Students s on s.id = e.studentid
+where s.status = 1;";
 $result = $conn->query($sql);
 
 include('_header.php');
@@ -22,9 +22,6 @@ include('_header.php');
         <div class="p-4">
             <h2 class="page-title">Current Enrollments</h2>
             <br>
-            <p class="text-end">
-                <a class="btn btn-primary" href="add-student.php" >Add</a>
-            </p>
             <table id="enrollments" class="table table-dark table-bordered table-hover">
                 <thead>
                     <tr>
@@ -48,7 +45,6 @@ include('_header.php');
                                 <td><?php echo ($e['fname']. ' ' .$e['lname']); ?></td>
                                 <td>
                                     <a class="btn btn-info" href="enrollment.php?id=<?php echo $e['id'];?>">View</a>
-                                    <a class="btn btn-warning">Remove</a>
                                 </td>
                             </tr>
                         <?php endwhile;?>

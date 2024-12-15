@@ -84,7 +84,6 @@ include('_header.php');
 ?>
 
 <main class="py-5">
-
     <div class="container" style="display: grid; grid-template-columns: 300px auto; column-gap: 10px; background-color: var(--darkgrey);">
         <div><?php include('_sidenav.php'); ?></div>
         <div class="p-4">
@@ -93,7 +92,7 @@ include('_header.php');
             <form class="registration-form" method="POST" enctype="multipart/form-data">
                 <input type="hidden" id="status" name="status" value="1">
                 <div class="row">
-                    <div class=col>
+                    <div class=col-3>
                         <label for="genderid">Gender:</label>
                         <select id="genderid" name="genderid" required>
                             <?php
@@ -112,7 +111,7 @@ include('_header.php');
                     </div>
                     <div class=col>
                         <label for="mname">Middle Name:</label>
-                        <input type="text" id="mname" name="mname" maxlength="50"><br><br>
+                        <input type="text" id="mname" name="mname" maxlength="50" required><br><br>
                     </div>
                     <div class=col>
                         <label for="lname">Last Name:</label>
@@ -121,13 +120,13 @@ include('_header.php');
                 </div>
 
                 <div class="row">
-                    <div class=col>
+                    <div class=col-8>
                         <label for="address">Email:</label>
-                        <input type="email" id="email" name="email" maxlength="100"><br><br>
+                        <input type="email" id="email" name="email" maxlength="100" required><br><br>
                     </div>
                     <div class=col>
                         <label for="phone">Phone:</label>
-                        <input type="phone" id="phone" name="phone" maxlength="10"><br><br>
+                        <input type="tel" id="phone" name="phone" length="12" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="876-123-4567"><br><br>
                     </div>
                 </div>
 
@@ -142,22 +141,79 @@ include('_header.php');
                     </div>                    
                 </div>
 
-                <div class="row">
-                    <div class=col-auto>
+                <div class="row ">
+                    <div class="col position-relative">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" maxlength="50" required><br><br>
+                        <input type="password" id="password" name="password" maxlength="50" required>
+                        <a href="javascript:void(0);" onclick="togglePassword()" style="position: absolute; right: 20px;top:33px">
+                            <img src="img/hidden.png" alt="Toggle Password" id="toggle-icon" style="width: 30px;">
+                        </a>
                     </div>
-                    <div class=col>
+                    <div class="col">
                         <label for="confirm-password">Confirm Password</label>
-                        <input type="password" id="confirm-password" name="confirm-password" maxlength="50" required><br><br>
+                        <input type="password" id="confirm-password" name="confirm-password" maxlength="50" required>
+                        
                     </div>
 
                 </div>
+                <br>
                 <button type="submit" class="btn btn-success w-100">Submit</button>
             </form>
         </div>
     </div>
 </main>
+
+<script>
+    $(document).ready(function () {
+        // Attach an event listener to the confirm password input
+        $('#confirm-password').on('keyup', function () {
+            // Get the values of the password and confirm password fields
+            let password = $('#password').val();
+            let confirmPassword = $('#confirm-password').val();
+
+            // Define the password validation regex
+            const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/;
+
+            // Check if the password matches the regex
+            if (!passwordRegex.test(password)) {
+                $('#password').css('border', '2px solid red');
+                $('#password-error').text('Password must be at least 8 characters, contain at least 1 number, and 1 special character.').css('color', 'red');
+            } else {
+                $('#password').css('border', '2px solid green');
+                $('#password-error').text('');
+            }
+
+            // Check if the passwords match
+            if (password !== confirmPassword) {
+                $('#confirm-password').css('border', '2px solid red');
+                $('#confirm-password-error').text('Passwords do not match.').css('color', 'red');
+            } else {
+                $('#confirm-password').css('border', '2px solid green');
+                $('#confirm-password-error').text('');
+            }
+        });
+
+        // Also validate on password input change
+        $('#password').on('keyup', function () {
+            $('#confirm-password').trigger('keyup'); // Trigger validation for both fields
+        });
+    });
+</script>
+
+<script>
+    function togglePassword() {
+        const passwordField = document.getElementById('password');
+        const toggleIcon = document.getElementById('toggle-icon');
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.src = 'img/eye.png'; // Update icon for "visible"
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.src = 'img/hidden.png'; // Update icon for "hidden"
+        }
+    }
+</script>
+
 <script>
     $(document).ready(function() {
         // Check if there is a session alert
