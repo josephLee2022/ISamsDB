@@ -171,9 +171,7 @@ include('_header.php');
                     <button class="tablinks" onclick="openCity(event, 'password')">Change Password</button>
                 </div>
                 <br>
-                <?php 
-                    AlertManager::displayError($errormessage);
-                ?>
+            
                 <!-- Tab content -->
                 <div id="info" class="tabcontent" style="display: block;">
                     <div class="tab-window row w-auto m-0">
@@ -269,9 +267,7 @@ include('_header.php');
                     <div id="password-message" class="mt-2"></div>
                 </div>
                 <br>
-                <div>
-                    <a href="all-teachers.php" class="btn btn-warning">Back</a>
-                </div>  
+
                 <script>
                     // Function to switch between tabs
                     function openCity(evt, cityName) {

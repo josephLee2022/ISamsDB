@@ -1,56 +1,81 @@
 <?php
-// Load PHPMailer
-require 'PHPMailer/PHPMailer/src/PHPMailer.php'; 
-require 'PHPMailer/PHPMailer/src/Exception.php';
-require 'PHPMailer/PHPMailer/src/SMTP.php'; 
+// Include PHPMailer files
+require 'PHPMailer/src/PHPMailer.php'; 
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/SMTP.php'; 
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // Sanitize and validate inputs
-  $name = htmlspecialchars($_POST['name']);
-  $email = 'kemoygallimore@gmail.com';
-  $phone = htmlspecialchars($_POST['phone']);
-  $message = htmlspecialchars($_POST['message']);
+    // Get form data
+    $name = $_POST['name'];
+    $email = 'kemoygallimore@gmail.com';
+    $phone = $_POST['phone'];
+    $message = $_POST['message'];
 
-  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    die("Invalid email address");
-  }
-
-  try {
+    // Create a new PHPMailer instance
     $mail = new PHPMailer\PHPMailer\PHPMailer(true);
-    $mail->isSMTP();
-    $mail->Host = 'smtp-mail.outlook.com'; // Outlook SMTP server
-    $mail->SMTPAuth = true;
-    $mail->Username = 'kemoy_gallimore@hotmail.com';
-    $mail->Password = 'Gallimore2!';
-    $mail->Port = 587;
-    $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
 
-    // Function to send email
-    function sendEmail($mail, $to, $subject, $body) {
-      $mail->clearAddresses();
-      $mail->addAddress($to);
-      $mail->Subject = $subject;
-      $mail->Body = $body;
-      $mail->send();
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->Port = 587;
+        $mail->SMTPAuth = true;
+        $mail->Username = 'profile11170@gmail.com';
+        $mail->Password = 'Sidedrum2!';
+        $mail->SMTPSecure = 'tls';
+
+        $mail->setFrom('profile11170@gmail.com', 'Your Name');
+        $mail->addAddress('kemoygallimore@gmail.com');
+
+        $mail->Subject = 'Test Email';
+        $mail->Body = 'This is a test email sent using PHPMailer.';
+
+        if (!$mail->send()) {
+            echo 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
+        } else {
+            echo 'Message has been sent';
+        }
+      
+        // Server settings
+        /*$mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com'; // Set the SMTP server to use
+        $mail->SMTPAuth = true;
+        $mail->Username = 'profile11170@gmail.com'; // Your Gmail address
+        $mail->Password = 'eiht kttf lxkk iqxd!'; // Your Gmail password (consider using App Password for security)
+        $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port = 465; // TCP port to connect to*
+
+        // Recipients
+        $mail->setFrom('profile11170@gmail.com', 'Your Name');
+        $mail->addAddress('kemoygallimore@gmail.com'); // Your email
+        //$mail->addAddress($email); // Recipient's email (from the form)
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Call Back Request';
+        $mail->Body    = "You received a request for a callback from:<br><strong>Name:</strong> $name<br><strong>Email:</strong> $email<br><strong>Phone:</strong> $phone<br><strong>Message:</strong><br>$message";
+
+        // Send email to you
+        $mail->send();
+
+        // Send email to the user who submitted the form
+        $mail->clearAddresses();
+        $mail->addAddress($email);
+        $mail->Subject = 'Thank you for your Request';
+        $mail->Body    = "Thank you for your call back request, $name. We will contact you soon.";
+
+        // Send the email to the user
+        $mail->send();
+
+        echo 'Message has been sent to both you and the user.';
+*/
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$e->getMessage()}";
     }
-
-    // Send email to admin
-
-    // Send confirmation email to user
-    $userBody = "Thank you for your call back request, $name. We will contact you soon.";
-    sendEmail($mail, $email, 'Thank you for your Request', $userBody);
-
-    echo 'Emails sent successfully!';
-  } catch (Exception $e) {
-    // Log error and show generic message
-    error_log("Mailer Error: {$e->getMessage()}");
-    echo 'There was an error sending your request. Please try again later. '.$e->getMessage();
-  }
 }
 
-include('_front-header.php');
+include('_front-header.php')
 ?>
-
 
 <body class="sub_page">
   <div class="hero_area">

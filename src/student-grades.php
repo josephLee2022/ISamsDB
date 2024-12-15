@@ -112,7 +112,7 @@ include('_header.php');
                                 <td><?php echo ($grade['Exam'] ?? ''); ?></td>
                                 <td>
                                     <?php if ($user == 'Teacher'): ?>
-                                        <a class="btn btn-info" href="edit-grades.php?id=<?php echo $grade['id'];?>">View Grades</a>
+                                        <a class="btn btn-info" href="edit-grades.php?id=<?php echo $grade['id'];?>">Edit Grades</a>
                                     <?php endif; ?>
                                 </td>
                             </tr>
