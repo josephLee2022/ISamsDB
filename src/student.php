@@ -149,18 +149,7 @@ include('_header.php');
                     src="<?php echo ($photo == NULL) ? 'img/person.png' : 'data:image/jpeg;base64,' . base64_encode($photo); ?>" 
                     alt="Profile Picture" style="width: 200px; height:200px; object-fit:cover; object-position:center; border-radius:100px; margin-bottom: 10px;">
                 <h1><?php echo $fname .' ' .$lname?></h1>
-
-
-
-
-
-                <?php echo "Entered id: $id<br>";?>
-
-
-
-
-
-                
+               
             </div>
             <div>
                 <div class="tab">
@@ -194,15 +183,7 @@ include('_header.php');
                 
                 <div id="profile" class="tabcontent">
                     <?php 
-                        // Example for displaying an error message
-                        if (!empty($errormessage)) {
-                            AlertManager::displayWarning($errormessage);
-                        }
-
-                        // Example for displaying a success message
-                        if (!empty($successmessage)) {
-                            AlertManager::displaySuccess($successmessage);
-                        }
+  
                     ?>
                     <form method="post">
                         <input type="hidden" name="id" value="<?php echo $id?>">
@@ -240,10 +221,6 @@ include('_header.php');
                     </form>
                 </div>
                 <br>
-
-                <div>
-                    <a href="all-students.php" class="btn btn-warning">Back</a>
-                </div>  
                 
                 <script>
                     // Function to switch between tabs

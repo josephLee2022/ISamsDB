@@ -5,7 +5,9 @@ include_once('db_connection.php');
 $conn = getDatabaseConnection();
 include('_header.php'); // Include header
 
-// Check if the form is submitted
+// Initialize variables for SweetAlert feedback
+$sweetAlert = '';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -14,33 +16,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $query = "SELECT * FROM user_credentials WHERE email = '$email' LIMIT 1";
     $result = $conn->query($query);
 
-    // Check if the query returns a valid result
     if ($result && $result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
         // Check if the passwords match (assuming plain text password storage)
         if ($password === $user['password']) {
-            $_SESSION['email'] = $user['email'];  // Store the user's email
-            $_SESSION['user_type'] = $user['user_type'];  // Store the user type (admin, teacher, parent)
-            // Check the user type and redirect accordingly
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['user_type'] = $user['user_type'];
+
+            // Redirect based on user type
             switch ($user['user_type']) {
                 case 'Admin':
-                    header('Location: admin-dashboard.php');
-                    exit();
+                    $sweetAlert = "Swal.fire('Welcome!', 'Redirecting to Admin Dashboard', 'success').then(() => { window.location.href = 'admin-dashboard.php'; });";
+                    break;
                 case 'Teacher':
-                    header('Location: teacher-dashboard.php');
-                    exit();
+                    $sweetAlert = "Swal.fire('Welcome!', 'Redirecting to Teacher Dashboard', 'success').then(() => { window.location.href = 'teacher-dashboard.php'; });";
+                    break;
                 case 'Parent':
-                    header('Location: parent-dashboard.php');
-                    exit();
+                    $sweetAlert = "Swal.fire('Welcome!', 'Redirecting to Parent Dashboard', 'success').then(() => { window.location.href = 'parent-dashboard.php'; });";
+                    break;
                 default:
-                    echo "Invalid user type.";
+                    $sweetAlert = "Swal.fire('Error!', 'Invalid user type.', 'error');";
             }
         } else {
-            echo "Invalid email or password.";
+            $sweetAlert = "Swal.fire('Error!', 'Invalid email or password.', 'error');";
         }
     } else {
-        echo "User not found.";
+        $sweetAlert = "Swal.fire('Error!', 'User not found.', 'error');";
     }
 }
 ob_end_flush();
@@ -81,6 +83,7 @@ ob_end_flush();
     </form>   
 </div>    
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="js/HeaderFooterManager.js"></script>
 <script>
     function togglePassword() {
@@ -99,6 +102,9 @@ ob_end_flush();
         document.getElementById('email').value = email;
         document.getElementById('password').value = password;
     }
+
+    // SweetAlert feedback
+    <?php if (!empty($sweetAlert)) echo $sweetAlert; ?>
 </script>
 
 <?php include('_footer.php'); ?>
