@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Redirect to a confirmation page or display success message
-    header('Location: attendance-confirmation.php');
+    header('Location: view-attendance.php');
     exit;
 }
 
