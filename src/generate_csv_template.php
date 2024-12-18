@@ -15,7 +15,7 @@ header('Content-Disposition: attachment; filename="' . $filename . '"');
 $output = fopen('php://output', 'w');
 
 // Write the column headers to the CSV
-fputcsv($output, $columns);
+fputcsv($output, $columns, ',', '"', '\\');
 
 // Close the output stream
 fclose($output);

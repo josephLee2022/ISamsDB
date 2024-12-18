@@ -147,4 +147,33 @@ include('_header.php');
         });
     });
 </script>
+<script>
+    document.getElementById('importBtn').addEventListener('click', function () {
+        Swal.fire({
+            title: 'Do you already have the template?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes, I have it',
+            denyButtonText: 'No, download it',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Prompt user to upload the file
+                Swal.fire({
+                    title: 'Upload CSV File',
+                    html: '<form id="uploadForm" action="import_students.php" method="POST" enctype="multipart/form-data">' +
+                        '<input type="file" name="csv_file" class="form-control" accept=".csv" required>' +
+                        '</form>',
+                    showCancelButton: true,
+                    confirmButtonText: 'Upload',
+                    preConfirm: () => {
+                        document.getElementById('uploadForm').submit();
+                    }
+                });
+            } else if (result.isDenied) {
+                // Redirect to download the template
+                window.location.href = 'generate_csv_template.php';
+            }
+        });
+    });
+</script>
 <?php include('_footer.php'); ?>

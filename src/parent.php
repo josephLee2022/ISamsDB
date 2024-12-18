@@ -105,7 +105,6 @@ else{
                 break;
             }
             $message = 'Profile updated successfully.';
-            AlertManager::setSuccessMessage($message);
             header("Location: " . $_SERVER['PHP_SELF'] . "?id=$id");
             exit;
         } while (false);
@@ -119,13 +118,11 @@ else{
         do {
             if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
                 $message = "All fields are required.";
-                AlertManager::setErrorMessage($message);
                 break;
             }
 
             if ($new_password !== $confirm_password) {
-                AlertManager::setErrorMessage("New password and confirm password do not match.");
-                AlertManager::setErrorMessage($message);
+               
                 break;
             }
 
@@ -134,14 +131,12 @@ else{
             $result = $conn->query($sql);
 
             if (!$result || $result->num_rows === 0) {
-                AlertManager::setErrorMessage("Invalid user.");
-                AlertManager::setErrorMessage($message);
+              
                 break;
             }
             $row = $result->fetch_assoc();
             if ($current_password !== $row["password"]) { // Replace with password hashing logic for production
-                AlertManager::setErrorMessage("Current password is incorrect.");
-                AlertManager::setErrorMessage($message);
+                
                 break;
             }
             // Update password
@@ -149,12 +144,10 @@ else{
             $sql = "UPDATE `parents` SET `password` = '$hashedPassword' WHERE `id` = $id";
             $result = $conn->query($sql);
             if (!$result) {
-                AlertManager::setErrorMessage("Failed to update password: " . $conn->error);
-                AlertManager::setErrorMessage("Failed to update password: " . $conn->error);
+               
                 break;
             }
-            AlertManager::setSuccessMessage("Password updated successfully.");
-            AlertManager::setSuccessMessage($message);
+           
             header("Location: " . $_SERVER['PHP_SELF'] . "?id=$id");
             exit;
         } while (false);
@@ -217,13 +210,6 @@ include('_header.php');
                 
                 <div id="profile" class="tabcontent">
                     <form method="post">
-                        <?php 
-                            // Example for displaying an error message
-                            if (!empty(AlertManager::getErrorMessage())) {echo AlertManager::getErrorMessage();}
-
-                            // Example for displaying a success message
-                            if (!empty(AlertManager::getSuccessMessage())) {echo AlertManager::getSuccessMessage();}
-                        ?>
                         <input type="hidden" name="form_type" value="profile_update">
                         <input hidden id="id" name="id" value="<?php echo $id?>">
                         <div class="tab-window row w-auto m-0">
@@ -263,19 +249,7 @@ include('_header.php');
                 
                 <div id="password" class="tabcontent">
                     <form id="password-form">
-                        <?php
-                            // Display success message
-                            if (!empty(AlertManager::peekSuccessMessage())) {
-                                echo "<div class='alert alert-success'>" . AlertManager::peekSuccessMessage() . "</div>";
-                                AlertManager::clearMessages(); // Clear messages after displaying
-                            }
-
-                            // Display error message
-                            if (!empty(AlertManager::peekErrorMessage())) {
-                                echo "<div class='alert alert-danger'>" . AlertManager::peekErrorMessage() . "</div>";
-                                AlertManager::clearMessages(); // Clear messages after displaying
-                            }
-                        ?>
+                       
                         <input hidden id="id" name="id" value="<?php echo $id ?>">
                         <div class="tab-window row w-auto m-0">
                             <div class="info-heading col-3 text-end">Current Password</div>
@@ -301,10 +275,7 @@ include('_header.php');
                     <div id="password-message" class="mt-2"></div>
                 </div>
                 <br>
-                <div>
-                    <a href="all-parents.php" class="btn btn-warning">Back</a>
-                </div>  
-                
+
                 <script>
                     // Function to switch between tabs
                     function openCity(evt, cityName) {

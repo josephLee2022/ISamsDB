@@ -51,7 +51,7 @@ include('_header.php');
     <div class="container" style="display: grid;grid-template-columns: 300px auto; column-gap: 10px;background-color: var(--darkgrey);">
         <div><?php include('_sidenav.php'); ?></div>           
         <div class="p-4">
-            <h2 class="page-title">Edit Grades</h2>
+            <h2 class="page-title">View Attendance</h2>
             <br>
             <form method="POST">
                 <div class="form-group">

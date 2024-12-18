@@ -80,9 +80,7 @@ include('_header.php');
     <div class="container" style="display: grid;grid-template-columns: 300px auto; column-gap: 10px;background-color: var(--darkgrey);">
         <div><?php include('_sidenav.php'); ?></div>           
         <div class="p-4">
-            <?php 
-                AlertManager::displayError($errormessage);
-            ?>            
+       
             <form method="post">
                 <input type="hidden" name="id" value="<?php echo $id?>">
                 <div class="tab-window row w-auto m-0">
