@@ -6,5 +6,3 @@ docker-php-ext-install mysqli
 docker exec -it appliedweb-db-1 mysql -u root
 GRANT ALL PRIVILEGES ON *.* TO 'php_docker'@'%';
 FLUSH PRIVILEGES;
-
-crea
